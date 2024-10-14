@@ -27,6 +27,7 @@ public class UserController {
 
         // Проверка, существует ли пользователь с таким логином
         if (userService.findUserByLogin(user.getLogin()).isPresent()) {
+            logger.info("User with this login is already exist: {}", user.getLogin());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
 
