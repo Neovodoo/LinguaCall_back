@@ -7,6 +7,8 @@ import com.Linguatalk.back.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,18 +29,24 @@ public class ChatController {
     private ChatMessageRepository chatMessageRepository;
 
     @PostMapping("/translate")
-    public ChatMessage translateChatMessage(@RequestBody ChatMessage chatMessage) {
-/*
+    public ResponseEntity <ChatMessage> translateChatMessage(@RequestBody ChatMessage chatMessage) {
+        logger.info("Received request to translate message: {}", chatMessage);
+
         boolean isSenderValid = userService.findUserByLogin(chatMessage.getSender()).isPresent();
         boolean isRecipientValid = userService.findUserByLogin(chatMessage.getRecipient()).isPresent();
 
-        if (!isSenderValid || !isRecipientValid) {
-            return "Error: Either sender or recipient does not exist.";
+        if (!isSenderValid) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
- */
-        logger.info("Received request to translate message: {}", chatMessage);
+
+        if (!isRecipientValid) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
         String translatedText = translationService.translateMessage(chatMessage.getMessage(), chatMessage.getLanguage());
         chatMessage.setTranslatedMessage(translatedText);
-        return chatMessageRepository.save(chatMessage);
+
+        // Сохраняем сообщение и возвращаем его
+        return ResponseEntity.ok(chatMessageRepository.save(chatMessage));
     }
 }
