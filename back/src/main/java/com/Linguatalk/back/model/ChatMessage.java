@@ -25,7 +25,9 @@ public class ChatMessage {
 
     private String message;
 
-    private String language;
+    private String languageFrom;
+
+    private String languageTo;
 
     private String translatedMessage;
 }

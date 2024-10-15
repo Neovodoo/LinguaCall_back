@@ -40,7 +40,7 @@ public class ChatController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        String translatedText = translationService.translateMessage(chatMessage.getMessage(), chatMessage.getLanguage());
+        String translatedText = translationService.translateMessage(chatMessage.getMessage(), chatMessage.getLanguageFrom(), chatMessage.getLanguageTo());
         chatMessage.setTranslatedMessage(translatedText);
 
         // Сохраняем сообщение и возвращаем его
