@@ -1,7 +1,6 @@
 # Use an official OpenJDK runtime as the base image
 FROM openjdk:17-jdk-slim
 
-# Set the working directory in the container
 WORKDIR /app
 
 # Copy the application JAR file into the container
