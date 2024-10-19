@@ -4,6 +4,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 COPY back/target/*.jar app.jar
+COPY back/src ./src
 
 # Expose the port the application runs on
 EXPOSE 8080
