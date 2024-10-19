@@ -16,7 +16,6 @@ public class TranslationService {
 
             // Используем ProcessBuilder для запуска Python-скрипта
             ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, message, languageFrom, languageTo);
-            processBuilder.directory(new File("./"));// путь, откуда сервер берет скрипт
 
             // Запуск процесса и чтение вывода
             Process process = processBuilder.start();
