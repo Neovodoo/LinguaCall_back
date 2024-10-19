@@ -14,11 +14,21 @@ public class UserService {
     private UserRepository userRepository;
 
     public User createUser(String login, String password) {
+
+        if (login == null || login.trim().isEmpty()) {
+            throw new IllegalArgumentException("Login cannot be empty or null.");
+        }
+
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty or null.");
+        }
+
         User user = new User();
         user.setLogin(login);
         user.setPassword(password); // Здесь можно добавить шифрование пароля
         return userRepository.save(user);
     }
+
 
     public Optional<User> findUserByLogin(String login) {
         return userRepository.findByLogin(login);
