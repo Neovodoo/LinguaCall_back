@@ -11,6 +11,7 @@ public class TranslationService {
     public String translateMessage(String message, String languageFrom, String languageTo) {
         //TODO: Реализовать перевод пходящего сообщения
         try {
+            System.out.println("Starting to translate " + message);
             // Путь к Python-скрипту
             String scriptPath = "src/main/java/com/Linguatalk/back/nlp/translate.py";
 
@@ -38,7 +39,7 @@ public class TranslationService {
                 System.err.println("Ошибка при выполнении Python-скрипта: " + errorResult.toString());
                 return null;
             }
-            System.out.println("Результат перевода: " + result);
+            System.out.println("Translation result " + result);
             return result.toString();
         } catch (Exception e) {
             e.printStackTrace();
