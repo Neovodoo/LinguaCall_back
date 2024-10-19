@@ -4,19 +4,20 @@ services:
   translate:
     build:
       context: ./translate
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     ports:
-      - "8000:8000"
+      - "0.0.0.0:8000:8000"
     expose:
       - "8000"
     container_name: fastapi-container
     restart: always
+
   back:
     build:
       context: "./back"
       dockerfile: "./Dockerfile"
     ports:
-      - "0.0.0.0:8081:8080" # Map the default port from the container to the host
+      - "${LINGUA_HOST}:8080" # Map the default port from the container to the host
     restart: always
     environment:
       TRANSLATE_HOST: ${TRANSLATE_HOST}
@@ -50,7 +51,7 @@ services:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test
     ports:
-      - "0.0.0.0:5433:5432"
+      - "${DATABASE_HOST}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/
 
