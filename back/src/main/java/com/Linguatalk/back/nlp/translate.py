@@ -5,19 +5,19 @@ import os
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 
 def translate(text, src_lang, tgt_lang):
-    print('Running python script')
+
     # Имя модели на Hugging Face
     model_name = f'Helsinki-NLP/opus-mt-{src_lang}-{tgt_lang}'
 
     # Указание директории для кэширования модели
     cache_dir = os.path.abspath('translation_models')
 
-    print("Opening/downloading model")
+
     # Загрузка токенизатора и модели с указанием папки кэша
     tokenizer = MarianTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
     model = MarianMTModel.from_pretrained(model_name, cache_dir=cache_dir)
 
-    print('Translating after downloading')
+
     # Перевод текста
     translated = model.generate(**tokenizer(text, return_tensors="pt", padding=True))
     translated_text = [tokenizer.decode(t, skip_special_tokens=True) for t in translated]
