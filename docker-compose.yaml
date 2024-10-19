@@ -1,14 +1,26 @@
 version: '3'
 
 services:
+  translate:
+    build:
+      context: ./translate
+      dockerfile: ./Dockerfile
+    ports:
+      - "${TRANSLATE_HOST}:8000"
+    expose:
+      - "8000"
+    container_name: fastapi-container
+    restart: always
+
   back:
     build:
-      context: "./"
+      context: "./back"
       dockerfile: "./Dockerfile"
     ports:
-      - "0.0.0.0:8081:8080" # Map the default port from the container to the host
+      - "${LINGUA_HOST}:8080" # Map the default port from the container to the host
     restart: always
     environment:
+      TRANSLATE_HOST: ${TRANSLATE_DOCKER_HOST}
       SPRING_APPLICATION_JSON: |-
         {
           "spring": {
@@ -39,7 +51,7 @@ services:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test
     ports:
-      - "0.0.0.0:5433:5432"
+      - "${DATABASE_HOST}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/
 
