@@ -15,7 +15,7 @@ public class TranslationService {
             String scriptPath = "src/main/java/com/Linguatalk/back/nlp/translate.py";
 
             // Используем ProcessBuilder для запуска Python-скрипта
-            ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, message, languageFrom, languageTo);
+            ProcessBuilder processBuilder = new ProcessBuilder("python3", scriptPath, message, languageFrom, languageTo);
 
             // Запуск процесса и чтение вывода
             Process process = processBuilder.start();
