@@ -6,7 +6,7 @@ services:
       context: "./"
       dockerfile: "./Dockerfile"
     ports:
-      - "0.0.0.0:8081:8080" # Map the default port from the container to the host
+      - "${LINGUA_HOST}:8080" # Map the default port from the container to the host
     restart: always
     environment:
       SPRING_APPLICATION_JSON: |-
