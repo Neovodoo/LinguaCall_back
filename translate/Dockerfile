@@ -8,8 +8,9 @@ WORKDIR /app
 COPY . /app
 
 # Install FastAPI and Uvicorn dependencies
-RUN pip3 install --no-cache-dir fastapi uvicorn pydantic 
-# transformers torch
+RUN pip3 install --no-cache-dir fastapi uvicorn pydantic transformers torch
+
+RUN pip3 install sentencepiece
 
 # Expose the port that Uvicorn will run on
 EXPOSE 8000

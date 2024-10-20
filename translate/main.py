@@ -1,11 +1,27 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-# from transformers import MarianMTModel, MarianTokenizer
-# import os
+from transformers import MarianMTModel, MarianTokenizer
+import os
 import uuid
 
 app = FastAPI()
 
+@app.on_event("startup")
+async def startup_event():
+    # Code to run at startup
+    print("Server started")
+    print("Start loading cache model")
+    src_lang = "ru"
+    tgt_lang = "en"
+    model_name = f'Helsinki-NLP/opus-mt-{src_lang}-{tgt_lang}'
+
+    # Указание директории для кэширования модели
+    cache_dir = os.path.abspath('translation_models')
+
+    # Загрузка токенизатора и модели с указанием папки кэша
+    tokenizer = MarianTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
+    model = MarianMTModel.from_pretrained(model_name, cache_dir=cache_dir)
+    print("End loading cache model")
 
 # Request model
 class TranslationRequest(BaseModel):
@@ -24,32 +40,45 @@ async def translate(request: TranslationRequest):
         raise HTTPException(status_code=400, detail="Message cannot be empty")
     
     # Mock translation logic
-    translated_message = "translate(request.message, request.languageFrom, request.languageTo)"
+    translated_message = translate(request.message, request.languageFrom, request.languageTo)
     
     return TranslationResponse(message=translated_message)
 
 # Run the application
 if __name__ == "__main__":
     import uvicorn
+    print("Start loading cache model")
+    src_lang = "ru"
+    tgt_lang = "en"
+    model_name = f'Helsinki-NLP/opus-mt-{src_lang}-{tgt_lang}'
+
+    # Указание директории для кэширования модели
+    cache_dir = os.path.abspath('translation_models')
+
+    # Загрузка токенизатора и модели с указанием папки кэша
+    tokenizer = MarianTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
+    model = MarianMTModel.from_pretrained(model_name, cache_dir=cache_dir)
+    print("End loading cache model")
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 # Установка переменных окружения
-# os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 
-# def translate(text, src_lang, tgt_lang):
-#     # Имя модели на Hugging Face
-#     model_name = f'Helsinki-NLP/opus-mt-{src_lang}-{tgt_lang}'
+def translate(text, src_lang, tgt_lang):
+    print("Start loading cache model")
+    # Имя модели на Hugging Face
+    model_name = f'Helsinki-NLP/opus-mt-{src_lang}-{tgt_lang}'
 
-#     # Указание директории для кэширования модели
-#     cache_dir = os.path.abspath('translation_models')
+    # Указание директории для кэширования модели
+    cache_dir = os.path.abspath('translation_models')
 
-#     # Загрузка токенизатора и модели с указанием папки кэша
-#     tokenizer = MarianTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
-#     model = MarianMTModel.from_pretrained(model_name, cache_dir=cache_dir)
-
-#     # Перевод текста
-#     translated = model.generate(**tokenizer(text, return_tensors="pt", padding=True))
-#     translated_text = [tokenizer.decode(t, skip_special_tokens=True) for t in translated]
-#     return translated_text[0]
+    # Загрузка токенизатора и модели с указанием папки кэша
+    tokenizer = MarianTokenizer.from_pretrained(model_name, cache_dir=cache_dыir)
+    model = MarianMTModel.from_pretrained(model_name, cache_dir=cache_dir)
+    print("End loading cache model")
+    # Перевод текста
+    translated = model.generate(**tokenizer(text, return_tensors="pt", padding=True))
+    translated_text = [tokenizer.decode(t, skip_special_tokens=True) for t in translated]
+    return translated_text[0]
 
 
