@@ -12,6 +12,8 @@ RUN pip3 install --no-cache-dir fastapi uvicorn pydantic transformers torch
 
 RUN pip3 install sentencepiece
 
+RUN pip3 install sacremoses
+
 # Expose the port that Uvicorn will run on
 EXPOSE 8000
 
