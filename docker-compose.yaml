@@ -9,6 +9,7 @@ services:
       - "${LINGUA_HOST}:8080" # Map the default port from the container to the host
     restart: always
     environment:
+      TRANSLATE_DOCKER_HOST: ${TRANSLATE_DOCKER_HOST}
       SPRING_APPLICATION_JSON: |-
         {
           "spring": {

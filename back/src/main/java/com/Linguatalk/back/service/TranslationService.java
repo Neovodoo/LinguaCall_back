@@ -1,5 +1,6 @@
 package com.Linguatalk.back.service;
 
+
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ public class TranslationService {
 
     public String translateMessage(String message, String sourceLanguage, String targetLanguage) {
         // Получаем URL для перевода из системной переменной
-        String translateUrl = "logckw0ckk484w8wgs0c8scg.217.18.62.26.sslip.io";//System.getenv("TRANSLATE_DOCKER_HOST");
+        String translateUrl = System.getenv("TRANSLATE_DOCKER_HOST");
 
         // Если системная переменная не установлена, можно задать значение по умолчанию
         if (translateUrl == null || translateUrl.isEmpty()) {
