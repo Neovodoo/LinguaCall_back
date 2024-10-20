@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
@@ -47,8 +49,19 @@ public class ChatController {
         return ResponseEntity.ok(chatMessageRepository.save(chatMessage));
     }
 
-    @GetMapping("/ping")
-    public String pingPong () {
-        return "Pong";
+    @GetMapping("/history/{chatId}")
+    public ResponseEntity<List<ChatMessage>> getChatHistory(@PathVariable String chatId) {
+        logger.info("Received request to retrieve chat history for chatId: {}", chatId);
+
+        // Retrieve messages by chatId sorted by time
+        List<ChatMessage> chatHistory = chatMessageRepository.findByChatIdOrderByTimeAsc(chatId);
+
+        // If no messages found, return 404
+        if (chatHistory.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // Return chat history with 200 OK status
+        return ResponseEntity.ok(chatHistory);
     }
 }
