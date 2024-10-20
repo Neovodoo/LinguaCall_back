@@ -73,7 +73,7 @@ def translate(text, src_lang, tgt_lang):
     cache_dir = os.path.abspath('translation_models')
 
     # Загрузка токенизатора и модели с указанием папки кэша
-    tokenizer = MarianTokenizer.from_pretrained(model_name, cache_dir=cache_dыir)
+    tokenizer = MarianTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
     model = MarianMTModel.from_pretrained(model_name, cache_dir=cache_dir)
     print("End loading cache model")
     # Перевод текста
