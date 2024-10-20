@@ -1,10 +1,7 @@
 package com.Linguatalk.back.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.UUID;
@@ -23,9 +20,15 @@ public class ChatMessage {
 
     private String recipient;
 
+    @Column(length = 10000)
     private String message;
 
-    private String language;
+    private String languageTo;
 
+    private String languageFrom;
+
+    @Column(length = 10000)
     private String translatedMessage;
+
+    private String time;
 }

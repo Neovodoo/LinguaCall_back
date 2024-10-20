@@ -58,7 +58,9 @@ public class ChatControllerTests {
                 "    \"sender\": \"sender\",\n" +
                 "    \"recipient\": \"recipient\",\n" +
                 "    \"message\": \"Hello\",\n" +
-                "    \"language\": \"ru\"\n" +
+                "    \"languageFrom\": \"ru\",\n" +
+                "    \"languageTo\": \"en\",\n" +
+                "    \"time\": \"12293913991\"\n" +
                 "}";
 
         // Perform the translation request
@@ -66,7 +68,7 @@ public class ChatControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(chatMessageJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"sender\":\"sender\",\"recipient\":\"recipient\",\"message\":\"Hello\",\"language\":\"ru\",\"translatedMessage\":\"Mock translation for: Hello to ru\"}"))
+                .andExpect(content().json("{\"sender\":\"sender\",\"recipient\":\"recipient\",\"message\":\"Hello\",\"languageFrom\":\"ru\",\"languageTo\":\"en\",\"translatedMessage\":\"Mock translation for: Hello from ru to en\",\"time\":\"12293913991\"}"))
                 .andDo(MockMvcResultHandlers.print());
     }
 }
