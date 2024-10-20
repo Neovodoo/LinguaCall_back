@@ -46,4 +46,10 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid login or password");
         }
     }
+
+    @PostMapping("/login/exist")
+    public Boolean isLoginExist (@RequestBody User user) {
+        logger.info("Check is login exist {}",  user.getLogin());
+        return userService.findUserByLogin( user.getLogin()).isPresent();
+    }
 }

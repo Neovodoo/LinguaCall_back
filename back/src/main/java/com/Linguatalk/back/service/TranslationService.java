@@ -1,50 +1,47 @@
 package com.Linguatalk.back.service;
 
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.springframework.stereotype.Service;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
 
 @Service
 public class TranslationService {
 
-    public String translateMessage(String message, String languageFrom, String languageTo) {
-        //TODO: Реализовать перевод пходящего сообщения
-        try {
-            System.out.println("Starting to translate " + message);
-            // Путь к Python-скрипту
-            String scriptPath = "src/main/java/com/Linguatalk/back/nlp/translate.py";
+    public String translateMessage(String message, String sourceLanguage, String targetLanguage) {
+        // Получаем URL для перевода из системной переменной
+        String translateUrl = "logckw0ckk484w8wgs0c8scg.217.18.62.26.sslip.io";//System.getenv("TRANSLATE_DOCKER_HOST");
 
-            // Используем ProcessBuilder для запуска Python-скрипта
-            ProcessBuilder processBuilder = new ProcessBuilder("python3", scriptPath, message, languageFrom, languageTo);
-
-            // Запуск процесса и чтение вывода
-            Process process = processBuilder.start();
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            StringBuilder result = new StringBuilder();
-            StringBuilder errorResult = new StringBuilder();
-            String line;
-
-            while ((line = stdInput.readLine()) != null) {
-                result.append(line);
-            }
-
-            while ((line = stdError.readLine()) != null) {
-                errorResult.append(line).append("\n");
-            }
-
-            // Проверка завершения процесса
-            if (process.waitFor() != 0) {
-                System.err.println("Ошибка при выполнении Python-скрипта: " + errorResult.toString());
-                return null;
-            }
-            System.out.println("Translation result " + result);
-            return result.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        // Если системная переменная не установлена, можно задать значение по умолчанию
+        if (translateUrl == null || translateUrl.isEmpty()) {
+            throw new IllegalArgumentException("Environment variable TRANSLATE_DOCKER_HOST is not set");
         }
+
+        // Собираем полный URL
+        String url = "http://" + translateUrl + "/translate";
+
+        // Формируем тело запроса
+        String requestBody = "{\n" +
+                " \"id\": \"46dc4c79-12de-4642-abd1-5e655c6090db\",\n" +
+                " \"message\": \"" + message + "\",\n" +
+                " \"languageFrom\":\"" + sourceLanguage + "\",\n" +
+                " \"languageTo\": \"" + targetLanguage + "\"\n" +
+                "}";
+
+        // Отправляем POST запрос с телом запроса и получаем ответ
+        Response response = RestAssured
+                .given()
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .post(url)
+                .then()
+                .statusCode(200) // Убеждаемся, что статус код 200
+                .extract()
+                .response();
+
+        // Извлекаем перевод из ответа
+        String translatedMessage = response.jsonPath().getString("message");
+        return translatedMessage;
     }
 
 }
