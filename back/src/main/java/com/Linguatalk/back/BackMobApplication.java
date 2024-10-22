@@ -1,5 +1,6 @@
 package com.Linguatalk.back;
 
+import com.Linguatalk.back.service.TranslationService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
