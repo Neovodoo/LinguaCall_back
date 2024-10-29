@@ -1,6 +1,8 @@
 package com.Linguatalk.back.service;
 
+import com.Linguatalk.back.model.ChatMessage;
 import com.Linguatalk.back.model.User;
+import com.Linguatalk.back.repository.ChatMessageRepository;
 import com.Linguatalk.back.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
 
     public User createUser(String login, String password) {
 
@@ -37,5 +42,10 @@ public class UserService {
     public boolean authenticateUser(String login, String password) {
         Optional<User> user = userRepository.findByLogin(login);
         return user.isPresent() && user.get().getPassword().equals(password);
+    }
+
+    public Optional<String> getChatIdIfExists(String login1, String login2) {
+        Optional<ChatMessage> chatMessage = chatMessageRepository.findBySenderAndRecipient(login1, login2);
+        return chatMessage.map(ChatMessage::getChatId);
     }
 }

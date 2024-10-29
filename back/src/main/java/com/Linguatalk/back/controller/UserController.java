@@ -7,10 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -51,5 +50,16 @@ public class UserController {
     public Boolean isLoginExist (@RequestBody User user) {
         logger.info("Check is login exist {}",  user.getLogin());
         return userService.findUserByLogin( user.getLogin()).isPresent();
+    }
+
+    @PostMapping("/getChatId")
+    public ResponseEntity<String> getChatId(@RequestParam String login1, @RequestParam String login2) {
+        logger.info("Received request to get chat ID for users: {} and {}", login1, login2);
+
+        Optional<String> chatId = userService.getChatIdIfExists(login1, login2);
+
+        return chatId
+                .map(id -> ResponseEntity.ok().body(id))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Chat not found"));
     }
 }
