@@ -7,6 +7,7 @@ import com.Linguatalk.back.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,7 +46,10 @@ public class UserService {
     }
 
     public Optional<String> getChatIdIfExists(String login1, String login2) {
-        Optional<ChatMessage> chatMessage = chatMessageRepository.findBySenderAndRecipient(login1, login2);
-        return chatMessage.map(ChatMessage::getChatId);
+        List<ChatMessage> chatMessages = chatMessageRepository.findBySenderAndRecipient(login1, login2);
+        if (!chatMessages.isEmpty()) {
+            return Optional.of(chatMessages.get(0).getChatId());  // Возвращаем chatId первой записи
+        }
+        return Optional.empty();
     }
 }
